@@ -110,33 +110,28 @@
 -- https://en.wikipedia.org/wiki/Rule_of_Sarrus
 -- Preencha a matriz com valores inteiros aleatórios no intervalo de 1 a 12.
 
-DO $$
-DECLARE
-    matriz INT[3][3] := ARRAY[
-        [valor_aleatorio_entre(1, 12), valor_aleatorio_entre(1, 12), valor_aleatorio_entre(1, 12)],
-        [valor_aleatorio_entre(1, 12), valor_aleatorio_entre(1, 12), valor_aleatorio_entre(1, 12)],
-        [valor_aleatorio_entre(1, 12), valor_aleatorio_entre(1, 12), valor_aleatorio_entre(1, 12)]
-    ];
-    linha INT[];
-    determinante INT := 0;
-    i INT := 1;
-BEGIN
-    -- Exibir matriz com FOREACH
-    RAISE NOTICE 'Matriz:';
-    FOREACH linha SLICE 1 IN ARRAY matriz LOOP
-        RAISE NOTICE '| % % % |', linha[1], linha[2], linha[3];
-    END LOOP;
-
-    -- Cálculo da Regra de Sarrus diretamente
-    determinante :=
-          matriz[1][1] * matriz[2][2] * matriz[3][3]
-        + matriz[1][2] * matriz[2][3] * matriz[3][1]
-        + matriz[1][3] * matriz[2][1] * matriz[3][2]
-        - matriz[1][3] * matriz[2][2] * matriz[3][1]
-        - matriz[1][2] * matriz[2][1] * matriz[3][3]
-        - matriz[1][1] * matriz[2][3] * matriz[3][2];
-
-    -- Mostrar resultado
-    RAISE NOTICE 'Determinante: %', determinante;
-END;
-$$
+-- DO $$
+-- DECLARE
+--     matriz INT[3][3] := ARRAY[
+--         [valor_aleatorio_entre(1, 12), valor_aleatorio_entre(1, 12), valor_aleatorio_entre(1, 12)],
+--         [valor_aleatorio_entre(1, 12), valor_aleatorio_entre(1, 12), valor_aleatorio_entre(1, 12)],
+--         [valor_aleatorio_entre(1, 12), valor_aleatorio_entre(1, 12), valor_aleatorio_entre(1, 12)]
+--     ];
+--     linha INT[];
+--     determinante INT := 0;
+--     i INT := 1;
+-- BEGIN
+--     RAISE NOTICE 'Matriz:';
+--     FOREACH linha SLICE 1 IN ARRAY matriz LOOP
+--         RAISE NOTICE '| % % % |', linha[1], linha[2], linha[3];
+--     END LOOP;
+--     determinante :=
+--           matriz[1][1] * matriz[2][2] * matriz[3][3]
+--         + matriz[1][2] * matriz[2][3] * matriz[3][1]
+--         + matriz[1][3] * matriz[2][1] * matriz[3][2]
+--         - matriz[1][3] * matriz[2][2] * matriz[3][1]
+--         - matriz[1][2] * matriz[2][1] * matriz[3][3]
+--         - matriz[1][1] * matriz[2][3] * matriz[3][2];
+--     RAISE NOTICE 'Determinante: %', determinante;
+-- END;
+-- $$

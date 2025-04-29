@@ -17,6 +17,65 @@
 -- END;
 -- $$ LANGUAGE plpgsql;
 
+-- Números pares entre 1 e 100 --
+
+-- -- Com FOR
+-- DO $$
+-- DECLARE
+--     i INT;
+-- BEGIN
+--     FOR i IN 1..100 LOOP
+--         IF i % 2 = 0 THEN
+--             RAISE NOTICE '%', i;
+--         END IF;
+--     END LOOP;
+-- END;
+-- $$
+
+-- -- Com WHILE
+-- DO $$
+-- DECLARE
+--     i INT := 1;
+-- BEGIN
+--     WHILE i <= 100 LOOP
+--         IF i % 2 = 0 THEN
+--             RAISE NOTICE '%', i;
+--         END IF;
+--         i := i + 1;
+--     END LOOP;
+-- END;
+-- $$
+
+-- -- Com LOOP
+-- DO $$
+-- DECLARE
+--     i INT := 1;
+-- BEGIN
+--     LOOP
+--         EXIT WHEN i > 100;
+--         IF i % 2 = 0 THEN
+--             RAISE NOTICE '%', i;
+--         END IF;
+--         i := i + 1;
+--     END LOOP;
+-- END;
+-- $$
+
+-- -- Com FOREACH
+-- DO $$
+-- DECLARE
+--     numeros INT[] := ARRAY(SELECT generate_series(1,100));
+--     n INT;
+-- BEGIN
+--     FOREACH n IN ARRAY numeros LOOP
+--         IF n % 2 = 0 THEN
+--             RAISE NOTICE '%', n;
+--         END IF;
+--     END LOOP;
+-- END;
+-- $$ 
+
+
 -- Gerar Valores inteiros de -50 a 50 -- 
 
 -- -- Com FOR
@@ -98,10 +157,258 @@
 -- 	RAISE NOTICE 'Positivos: %', contador;
 -- END;
 -- $$
--------------------------------------------------------------------------------------------------------------------------------------------------
--- Gerar Valores Inteiros de 20 a 50 --
 
 
+-- Gerar Valores Inteiros de 20 a 50 ----------------------------------------------------------------------------------------------
+
+-- -- Com LOOP
+-- DO $$
+-- DECLARE
+--     x INT := valor_aleatorio_entre(20, 50);
+--     y INT := valor_aleatorio_entre(20, 50);
+--     menor INT;
+--     maior INT;
+--     soma INT := 0;
+--     atual INT;
+-- BEGIN
+--     IF x > y THEN
+--         menor := y;
+--         maior := x;
+--     ELSE
+--         menor := x;
+--         maior := y;
+--     END IF;
+--     atual := menor + 1;        --pega o numero depois do menor, isso para não incluir o proprio x ou y
+--     LOOP
+--         EXIT WHEN atual >= maior;
+--         IF atual % 2 <> 0 THEN
+--             soma := soma + atual;
+--         END IF;
+--         atual := atual + 1;
+--     END LOOP;
+--     RAISE NOTICE 'X: %, Y: %, Soma dos ímpares: %', x, y, soma;
+-- END;
+-- $$
+
+-- -- Com WHILE
+-- DO $$
+-- DECLARE
+--     x INT := valor_aleatorio_entre(20, 50);
+--     y INT := valor_aleatorio_entre(20, 50);
+--     menor INT;
+--     maior INT;
+--     soma INT := 0;
+--     atual INT;
+-- BEGIN
+--     IF x > y THEN
+--         menor := y;
+--         maior := x;
+--     ELSE
+--         menor := x;
+--         maior := y;
+--     END IF;
+--     atual := menor + 1;
+--     WHILE atual < maior LOOP
+--         IF atual % 2 <> 0 THEN
+--             soma := soma + atual;
+--         END IF;
+--         atual := atual + 1;
+--     END LOOP;
+--     RAISE NOTICE 'X: %, Y: %, Soma dos ímpares: %', x, y, soma;
+-- END;
+-- $$
+
+-- -- Com FOR
+-- DO $$
+-- DECLARE
+--     x INT := valor_aleatorio_entre(20, 50);
+--     y INT := valor_aleatorio_entre(20, 50);
+--     menor INT;
+--     maior INT;
+--     soma INT := 0;
+-- BEGIN
+--     IF x > y THEN
+--         menor := y;
+--         maior := x;
+--     ELSE
+--         menor := x;
+--         maior := y;
+--     END IF;
+--     FOR i IN (menor + 1)..(maior - 1) LOOP       --vai percorrer somente os números entre X e Y, sem incluir X nem Y.
+--         IF i % 2 <> 0 THEN
+--             soma := soma + i;
+--         END IF;
+--     END LOOP;
+--     RAISE NOTICE 'X: %, Y: %, Soma dos ímpares: %', x, y, soma;
+-- END;
+-- $$
+
+-- -- Com FOREACH
+-- DO $$
+-- DECLARE
+--     x INT := valor_aleatorio_entre(20, 50);
+--     y INT := valor_aleatorio_entre(20, 50);
+--     menor INT;
+--     maior INT;
+--     soma INT := 0;
+--     n INT;
+--     numeros INT[];
+-- BEGIN
+--     IF x > y THEN
+--         menor := y;
+--         maior := x;
+--     ELSE
+--         menor := x;
+--         maior := y;
+--     END IF;
+
+--     FOR i IN (menor + 1)..(maior - 1) LOOP
+--         numeros := array_append(numeros, i);
+--     END LOOP;
+
+--     FOREACH n IN ARRAY numeros LOOP
+--         IF n % 2 <> 0 THEN
+--             soma := soma + n;
+--         END IF;
+--     END LOOP;
+--     RAISE NOTICE 'X: %, Y: %, Soma dos ímpares: %', x, y, soma;
+-- END;
+-- $$
+
+
+-- Gerar Valores Inteiros de 1 a 100 ----------------------------------------------------------------------------------------------
+
+-- -- Com LOOP
+-- DO $$
+-- DECLARE
+--     m INT;
+--     n INT;
+--     menor INT;
+--     maior INT;
+--     soma INT;
+-- BEGIN
+--     LOOP
+--         m := valor_aleatorio_entre(0, 100);               -- 0 para poder forçar a parada, como o problema exige
+--         n := valor_aleatorio_entre(0, 100);
+--         EXIT WHEN m <= 0 OR n <= 0;
+--         IF m > n THEN
+--             maior := m;
+--             menor := n;
+--         ELSE
+--             menor := m;
+--             maior := n;
+--         END IF;
+--         soma := 0;
+--         FOR i IN menor..maior LOOP
+--             soma := soma + i;
+--             RAISE NOTICE '% ', i;
+--         END LOOP;
+--         RAISE NOTICE 'Soma = %', soma;
+--     END LOOP;
+-- END;
+-- $$
+
+
+-- -- Com WHILE
+-- DO $$
+-- DECLARE
+--     m INT := 1;
+--     n INT := 1;
+--     menor INT;
+--     maior INT;
+--     soma INT;
+--     i INT;
+-- BEGIN
+--     WHILE m > 0 AND n > 0 LOOP
+--         m := valor_aleatorio_entre(0, 100);               -- 0 para poder forçar a parada, como o problema exige
+--         n := valor_aleatorio_entre(0, 100);
+--         EXIT WHEN m <= 0 OR n <= 0;
+--         IF m > n THEN
+--             maior := m;
+--             menor := n;
+--         ELSE
+--             menor := m;
+--             maior := n;
+--         END IF;
+--         soma := 0;
+--         i := menor;
+--         WHILE i <= maior LOOP
+--             soma := soma + i;
+--             RAISE NOTICE '% ', i;
+--             i := i + 1;
+--         END LOOP;
+--         RAISE NOTICE 'Soma = %', soma;
+--     END LOOP;
+-- END;
+-- $$
+
+
+-- -- Com FOR
+-- DO $$
+-- DECLARE
+--     m INT;
+--     n INT;
+--     menor INT;
+--     maior INT;
+--     soma INT;
+-- BEGIN
+--     FOR numero IN 1..100 LOOP                             -- pega os numeros de 1 a 100
+--         m := valor_aleatorio_entre(0, 100);               -- 0 para poder forçar a parada, como o problema exige
+--         n := valor_aleatorio_entre(0, 100);
+--         EXIT WHEN m <= 0 OR n <= 0;
+--         IF m > n THEN
+--             maior := m;
+--             menor := n;
+--         ELSE
+--             menor := m;
+--             maior := n;
+--         END IF;
+--         soma := 0;
+--         FOR i IN menor..maior LOOP
+--             soma := soma + i;
+--             RAISE NOTICE '% ', i;
+--         END LOOP;
+--         RAISE NOTICE 'Soma = %', soma;
+--     END LOOP;
+-- END;
+-- $$
+
+
+-- -- Com FOREACH
+-- DO $$
+-- DECLARE
+--     m INT;
+--     n INT;
+--     menor INT;
+--     maior INT;
+--     soma INT;
+--     numeros INT[];
+--     num INT;
+-- BEGIN
+--     LOOP
+--         m := valor_aleatorio_entre(0, 100);               -- 0 para poder forçar a parada, como o problema exige
+--         n := valor_aleatorio_entre(0, 100);
+--         EXIT WHEN m <= 0 OR n <= 0;
+--         IF m > n THEN
+--             maior := m;
+--             menor := n;
+--         ELSE
+--             menor := m;
+--             maior := n;
+--         END IF;
+--         numeros := '{}';
+--         soma := 0;
+--         FOR i IN menor..maior LOOP
+--             numeros := array_append(numeros, i);
+--         END LOOP;
+--         FOREACH num IN ARRAY numeros LOOP
+--             soma := soma + num;
+--             RAISE NOTICE '%', num;
+--         END LOOP;
+--         RAISE NOTICE 'Soma = %', soma;
+--     END LOOP;
+-- END;
+-- $$
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------
